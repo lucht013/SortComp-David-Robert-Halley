@@ -61,11 +61,11 @@ inFileNames.length.times do |r|
     
     ### disqualify those whose diff is non-empty
     system("echo 'Results of diff:\n' >> #{resultsFile}")
-    system("diff --ignore-all-space --brief outRun#{r + 1}Group#{j}.txt outRun#{r + 1}Group0.txt >> #{resultsFile}")
+    system("diff --ignore-all-space --brief outRun#{r + 1}Group#{j}.txt outRun#{r + 1}Group10.txt >> #{resultsFile}")
 
     # matching the stderr to check correctness:
     if $?.exitstatus == 1
-      system("echo 'The files outRun#{r + 1}Group#{j}.txt outRun#{r + 1}Group0.txt differ'")
+      system("echo 'The files outRun#{r + 1}Group#{j}.txt outRun#{r + 1}Group10.txt differ'")
       # ignoring the times:
       runTimes[r][j][3] = 1000000.0
     else 
