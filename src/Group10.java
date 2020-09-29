@@ -51,49 +51,72 @@ public class Group10 {
         for (int i = 0; i < toSort.length; ++i) {
             toSortData[i] = new Data(toSort[i]);
         }
+        int[] counters = theDeleter(toSortData);
         Arrays.sort(toSortData, new GematriaComparator());
-        //quickSort(toSortData,0, toSort.length);
+        rebuilder(toSortData,counters);
         return toSortData;
     }
 
-    public static boolean isSorted(Data[] array){
-        GematriaComparator Gematria = new GematriaComparator();
-        for(int i=0; i< array.length-1; i++){
-            if(Gematria.compare(array[i],array[i+1]) == -1){
-                return false;
+    private static int[] theDeleter(Data[] toSort){
+        //go through array once, have 8 counters named after the words they are counting, if it is word ++counter and delete at index
+        int a = 0;
+        int i = 0;
+        int and = 0;
+        int my = 0;
+        int of = 0;
+        int the = 0;
+        int to = 0;
+        int you = 0;
+
+        for(int j = 0; j < toSort.length; ++j){
+            if(toSort[j].word.equals("and")) {
+                and++;
+                toSort[j].word = "";
+            }
+            else if(toSort[j].word.equals("the")){
+                    the++;
+                    toSort[j].word = "";
+            }
+            else if(toSort[j].word.equals("i")){
+                    i++;
+                    toSort[j].word = "";
+            }
+            else if(toSort[j].word.equals("to")){
+                to++;
+                toSort[j].word = "";
+            }
+            else if(toSort[j].word.equals("of")){
+                of++;
+                toSort[j].word = "";
+            }
+            else if(toSort[j].word.equals("a")){
+                a++;
+                toSort[j].word = "";
+            }
+            else if(toSort[j].word.equals("my")){
+                my++;
+                toSort[j].word = "";
+            }
+            else if(toSort[j].word.equals("you")){
+                you++;
+                toSort[j].word = "";
             }
         }
-        return true;
+        int[] counters = new int[8];
+        counters[0] = a;
+        counters[1] = i;
+        counters[2] = and;
+        counters[3] = my;
+        counters[4] = of;
+        counters[5] = the;
+        counters[6] = to;
+        counters[7] = you;
+        return counters;
     }
-    public static void quickSort(Data[] a, int low, int high){
-        if(low < high){
-            int q = partition(a, low, high);
-            quickSort(a,low, q-1);
-            quickSort(a,q+1,high);
-        }
-    }//end quicksort
 
-    public static int partition(Data[] a, int low, int high){
-        Data pivot = a[high - 1];
-        GematriaComparator GematriaCompare = new GematriaComparator();
+    private static void rebuilder(Data[] toSort, int[] counters){
 
-        int index = (low -1);
-        Data temp = new Data("a");
-
-        for(int i = low; i< high; i++){
-            // if curr element is smaller than pivot
-            if(GematriaCompare.compare(a[i],pivot) == 1){
-                index++;
-                temp = a[index];
-                a[index] = a[i];
-                a[i] = temp;
-            }
-        }
-        temp = a[index+1];
-        a[index+1] = a[high - 1];
-        a[high - 1] = temp;
-        return(index+1);
-    }//end partition
+    }
 
     private static void printArray(String[] Arr, int n) {
         for(int i = 0; i < n; i++) {
