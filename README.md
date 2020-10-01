@@ -2,6 +2,7 @@
 Materials for UMM CSci 3501 "Algorithms and Computability" 2020 Sorting Competition.
 
 # Table of contents
+* [Notes for round 2](#notes)
 * [Goal of the competition](#goal)
 * [The data](#data)
 * [How is the data generated](#generating)
@@ -14,6 +15,10 @@ Materials for UMM CSci 3501 "Algorithms and Computability" 2020 Sorting Competit
 * [Results of the final competition](#final)
 * [Presentations](#presentation)
 
+
+## Notes for round 2 <a name="notes"></a>
+* get rid of second for loop in sort
+* use linked list for non-common list
 
 ## Goal of the competition <a name="goal"></a>
 
