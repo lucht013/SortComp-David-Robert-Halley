@@ -67,8 +67,8 @@ public class Group10 {
         int[] counters = theDeleter(everythingList);
         Data[] nonCommonList = new Data[everythingList.length - counters[8]];
 
-        System.out.println("everythingList length: " + everythingList.length);
-        System.out.println("Length of nonCommonList: " + nonCommonList.length);
+        //System.out.println("everythingList length: " + everythingList.length);
+        //System.out.println("Length of nonCommonList: " + nonCommonList.length);
 
         int nonCommonCounter = 0;
         for(int j = 0; j < everythingList.length; j++){
@@ -148,7 +148,7 @@ public class Group10 {
         counters[7] = you;
         counters[8] = counters[0] + counters[1] + counters[2] + counters[3] +
                 counters[4] + counters[5] + counters[6] + counters[7];
-        System.out.println("Counters at 8 is: " + counters[8]);
+        //System.out.println("Counters at 8 is: " + counters[8]);
         Arrays.sort(counters);
 
         return counters;
@@ -167,7 +167,7 @@ public class Group10 {
                    comparator.gematrify(commonWords[j]) < comparator.gematrify(nonCommons[i+1].word)){
                     //System.out.println("hello!");
                     for(int k = 0; k < counters[j]; k++){
-                        System.out.println(j);
+                        //System.out.println(j);
                         everythingList[i + commonMod].word = commonWords[j];
                         commonMod++;
                     }
