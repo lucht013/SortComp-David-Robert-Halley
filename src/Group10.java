@@ -14,7 +14,7 @@ import java.math.BigInteger;
 public class Group10 {
     public static void main(String[] args) throws InterruptedException, FileNotFoundException,IOException {
         // testing the comparator:
-        //Data.test_Data(); // This MUST be commented out for your submission to the competition!
+        Data.test_Data(); // This MUST be commented out for your submission to the competition!
 
         if (args.length < 2) {
             System.out.println("Please run with two command line arguments: input and output file names");
@@ -40,147 +40,89 @@ public class Group10 {
     }
 
     // YOUR SORTING METHOD GOES HERE.
-    // You may call other methods and use other classes.
-    // You may ALSO modify the methods, innner classes, etc, of Data[]
-    // But not in way that transfers information from the warmup sort to the timed sort.
-    // Note: you may change the return type of the method.
-    // You would need to provide your own function that prints your sorted array to
-    // a file in the exact same format that my program outputs
+// Java program for implementation of Heap Sort
+    public static class HeapSort
+    {
+        public void sort(int arr[])
+        {
+            int n = arr.length;
+
+            // Build heap (rearrange array)
+            for (int i = n / 2 - 1; i >= 0; i--)
+                heapify(arr, n, i);
+
+            // One by one extract an element from heap
+            for (int i=n-1; i>0; i--)
+            {
+                // Move current root to end
+                int temp = arr[0];
+                arr[0] = arr[i];
+                arr[i] = temp;
+
+                // call max heapify on the reduced heap
+                heapify(arr, i, 0);
+            }
+        }
+
+        // To heapify a subtree rooted with node i which is
+        // an index in arr[]. n is size of heap
+        void heapify(int arr[], int n, int i)
+        {
+            int largest = i; // Initialize largest as root
+            int l = 2*i + 1; // left = 2*i + 1
+            int r = 2*i + 2; // right = 2*i + 2
+
+            // If left child is larger than root
+            if (l < n && arr[l] > arr[largest])
+                largest = l;
+
+            // If right child is larger than largest so far
+            if (r < n && arr[r] > arr[largest])
+                largest = r;
+
+            // If largest is not root
+            if (largest != i)
+            {
+                int swap = arr[i];
+                arr[i] = arr[largest];
+                arr[largest] = swap;
+
+                // Recursively heapify the affected sub-tree
+                heapify(arr, n, largest);
+            }
+        }
+
+        /* A utility function to print array of size n */
+        static void printArray(int arr[])
+        {
+            int n = arr.length;
+            for (int i=0; i<n; ++i)
+                System.out.print(arr[i]+" ");
+            System.out.println();
+        }
+
+        // Driver program
+        public static void main(String args[])
+        {
+            int arr[] = {12, 11, 13, 5, 6, 7};
+            int n = arr.length;
+
+            HeapSort ob = new HeapSort();
+            ob.sort(arr);
+
+            System.out.println("Sorted array is");
+            printArray(arr);
+        }
+    }
+
+
     private static Data[] sort(String[] toSort) {
-
-        String[] commonWords = new String[8];
-
-        commonWords[0] = "a";
-        commonWords[1] = "i";
-        commonWords[2] = "and";
-        commonWords[3] = "my";
-        commonWords[4] = "of";
-        commonWords[5] = "the";
-        commonWords[6] = "to";
-        commonWords[7] = "you";
-
-        Data[] everythingList = new Data[toSort.length];
+        Data[] toSortData = new Data[toSort.length];
         for (int i = 0; i < toSort.length; ++i) {
-            everythingList[i] = new Data(toSort[i]);
+            toSortData[i] = new Data(toSort[i]);
         }
-
-        int[] counters = theDeleter(everythingList);
-        Data[] nonCommonList = new Data[everythingList.length - counters[8]];
-
-        //System.out.println("everythingList length: " + everythingList.length);
-        //System.out.println("Length of nonCommonList: " + nonCommonList.length);
-
-        int nonCommonCounter = 0;
-        for(int j = 0; j < everythingList.length; j++){
-            if(!everythingList[j].word.equals("")){
-                nonCommonList[nonCommonCounter] = new Data(everythingList[j].word);
-                nonCommonCounter++;
-            }
-
-        }
-
-        Arrays.sort(nonCommonList, new GematriaComparator());
-        rebuilder(everythingList,nonCommonList,counters,commonWords);
-        return everythingList;
-    }
-
-    private static int[] theDeleter(Data[] toSort){
-        //go through array once, have 8 counters named after the words they are counting, if it is word ++counter and delete at index
-        int a = 0;
-        int gemA = 1;
-        int i = 0;
-        int gemI = 9;
-        int and = 0;
-        int gemAnd = 36;
-        int my = 0;
-        int gemMy = 38;
-        int of = 0;
-        int gemOf = 8;
-        int the = 0;
-        int gemThe = 101;
-        int to = 0;
-        int gemTo = 46;
-        int you = 0;
-        int gemYou = 151;
-
-        for(int j = 0; j < toSort.length; ++j){
-            if(toSort[j].word.equals("and")) {
-                and++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("the")){
-                the++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("i")){
-                i++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("to")){
-                to++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("of")){
-                of++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("a")){
-                a++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("my")){
-                my++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("you")){
-                you++;
-                toSort[j].word = "";
-            }
-        }
-        int[] counters = new int[9];
-        counters[0] = a;
-        counters[1] = i;
-        counters[2] = and;
-        counters[3] = my;
-        counters[4] = of;
-        counters[5] = the;
-        counters[6] = to;
-        counters[7] = you;
-        counters[8] = counters[0] + counters[1] + counters[2] + counters[3] +
-                counters[4] + counters[5] + counters[6] + counters[7];
-        //System.out.println("Counters at 8 is: " + counters[8]);
-        Arrays.sort(counters);
-
-        return counters;
-    }
-
-    private static void rebuilder(Data[] everythingList, Data[] nonCommons, int[] counters, String[] commonWords){
-        int commonMod = 0;//this will modify the index to account for common placement
-        boolean commonFound = false;
-        GematriaComparator comparator = new GematriaComparator();
-        for(int i = 0; i < nonCommons.length-1; i++){
-            commonFound = false;
-            commonCheck: //I'm so sorry.
-            for(int j = 0; j < commonWords.length; j++){
-
-                if(comparator.gematrify(nonCommons[i].word) < comparator.gematrify(commonWords[j]) &&
-                   comparator.gematrify(commonWords[j]) < comparator.gematrify(nonCommons[i+1].word)){
-                    //System.out.println("hello!");
-                    for(int k = 0; k < counters[j]; k++){
-                        //System.out.println(j);
-                        everythingList[i + commonMod].word = commonWords[j];
-                        commonMod++;
-                    }
-                    commonFound = true;
-                    break commonCheck;
-                }
-            }
-
-            if(!commonFound){
-                everythingList[i + commonMod] = nonCommons[i];
-            }
-
-        }
+        Arrays.heapsort(toSortData, new GematriaComparator());
+        return toSortData;
     }
 
     private static void printArray(String[] Arr, int n) {
