@@ -48,138 +48,68 @@ public class Group10 {
     // a file in the exact same format that my program outputs
     private static Data[] sort(String[] toSort) {
 
-        String[] commonWords = new String[8];
-
-        commonWords[0] = "a";
-        commonWords[1] = "i";
-        commonWords[2] = "and";
-        commonWords[3] = "my";
-        commonWords[4] = "of";
-        commonWords[5] = "the";
-        commonWords[6] = "to";
-        commonWords[7] = "you";
-
-        Data[] everythingList = new Data[toSort.length];
+        Data[] fullList = new Data[toSort.length];
         for (int i = 0; i < toSort.length; ++i) {
-            everythingList[i] = new Data(toSort[i]);
+            fullList[i] = new Data(toSort[i]);
         }
-
-        int[] counters = theDeleter(everythingList);
-        Data[] nonCommonList = new Data[everythingList.length - counters[8]];
-
-        //System.out.println("everythingList length: " + everythingList.length);
-        //System.out.println("Length of nonCommonList: " + nonCommonList.length);
-
-        int nonCommonCounter = 0;
-        for(int j = 0; j < everythingList.length; j++){
-            if(!everythingList[j].word.equals("")){
-                nonCommonList[nonCommonCounter] = new Data(everythingList[j].word);
-                nonCommonCounter++;
-            }
-
-        }
-
-        Arrays.sort(nonCommonList, new GematriaComparator());
-        rebuilder(everythingList,nonCommonList,counters,commonWords);
-        return everythingList;
+        Radix radixSort = new Radix();
+        radixSort.radixsort(fullList,toSort.length);
+        return fullList;
     }
 
-    private static int[] theDeleter(Data[] toSort){
-        //go through array once, have 8 counters named after the words they are counting, if it is word ++counter and delete at index
-        int a = 0;
-        int gemA = 1;
-        int i = 0;
-        int gemI = 9;
-        int and = 0;
-        int gemAnd = 36;
-        int my = 0;
-        int gemMy = 38;
-        int of = 0;
-        int gemOf = 8;
-        int the = 0;
-        int gemThe = 101;
-        int to = 0;
-        int gemTo = 46;
-        int you = 0;
-        int gemYou = 151;
+//GeeksforGeeks.org
+    static class Radix {
 
-        for(int j = 0; j < toSort.length; ++j){
-            if(toSort[j].word.equals("and")) {
-                and++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("the")){
-                the++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("i")){
-                i++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("to")){
-                to++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("of")){
-                of++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("a")){
-                a++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("my")){
-                my++;
-                toSort[j].word = "";
-            }
-            else if(toSort[j].word.equals("you")){
-                you++;
-                toSort[j].word = "";
-            }
-        }
-        int[] counters = new int[9];
-        counters[0] = a;
-        counters[1] = i;
-        counters[2] = and;
-        counters[3] = my;
-        counters[4] = of;
-        counters[5] = the;
-        counters[6] = to;
-        counters[7] = you;
-        counters[8] = counters[0] + counters[1] + counters[2] + counters[3] +
-                counters[4] + counters[5] + counters[6] + counters[7];
-        //System.out.println("Counters at 8 is: " + counters[8]);
-        Arrays.sort(counters);
-
-        return counters;
-    }
-
-    private static void rebuilder(Data[] everythingList, Data[] nonCommons, int[] counters, String[] commonWords){
-        int commonMod = 0;//this will modify the index to account for common placement
-        boolean commonFound = false;
         GematriaComparator comparator = new GematriaComparator();
-        for(int i = 0; i < nonCommons.length-1; i++){
-            commonFound = false;
-            commonCheck: //I'm so sorry.
-            for(int j = 0; j < commonWords.length; j++){
 
-                if(comparator.gematrify(nonCommons[i].word) < comparator.gematrify(commonWords[j]) &&
-                   comparator.gematrify(commonWords[j]) < comparator.gematrify(nonCommons[i+1].word)){
-                    //System.out.println("hello!");
-                    for(int k = 0; k < counters[j]; k++){
-                        //System.out.println(j);
-                        everythingList[i + commonMod].word = commonWords[j];
-                        commonMod++;
-                    }
-                    commonFound = true;
-                    break commonCheck;
+        long getMax(Data[] arr, int n) {
+            long mx = comparator.gematrify(arr[0].word);
+            for (int i = 1; i < n; i++) {
+                long temp = comparator.gematrify(arr[i].word);
+                if (temp > mx) {
+                    mx = temp;
                 }
             }
+            return mx;
+        }
 
-            if(!commonFound){
-                everythingList[i + commonMod] = nonCommons[i];
+        // A function to do counting sort of arr[] according to
+        // the digit represented by exp.
+        void countSort(Data[] arr, int n, long exp) {
+            Data[] output = new Data[n]; // output array
+            int i;
+            int[] count = new int[10];
+            Arrays.fill(count, 0);
+
+            // Store count of occurrences in count[]
+            for (i = 0; i < n; i++)
+                count[(int) ((comparator.gematrify(arr[i].word) / exp) % 10)]++;
+
+            // Change count[i] so that count[i] now contains
+            // actual position of this digit in output[]
+            for (i = 1; i < 10; i++)
+                count[i] += count[i - 1];
+
+            // Build the output array
+            for (i = n - 1; i >= 0; i--) {
+                output[count[(int) ((comparator.gematrify(arr[i].word) / exp) % 10)] - 1] = arr[i];
+                count[(int) ((comparator.gematrify(arr[i].word) / exp) % 10)]--;
             }
 
+            // Copy the output array to arr[], so that arr[] now
+            // contains sorted numbers according to curent digit
+            for (i = 0; i < n; i++)
+                arr[i] = output[i];
+        }
+
+        // The main function to that sorts arr[] of size n using
+        // Radix Sort
+        void radixsort(Data[] arr, int n) {
+
+            long m = getMax(arr, n);
+
+            for (int exp = 1; m / exp > 0; exp *= 10)
+                countSort(arr, n, exp);
         }
     }
 
@@ -283,7 +213,7 @@ public class Group10 {
         public static void test_Data() {
             String s1,s2;
 
-            print_test("cat","cat");      // Two of the same thing
+            print_test("a","b");      // Two of the same thing
             print_test("cat","dog");      // Two different
             print_test("cat","doh");      // both with even gematria
             System.out.println("---");
