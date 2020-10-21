@@ -16,6 +16,7 @@ public class Group10 {
         // testing the comparator:
         //Data.test_Data(); // This MUST be commented out for your submission to the competition!
 
+
         if (args.length < 2) {
             System.out.println("Please run with two command line arguments: input and output file names");
             System.exit(0);
@@ -54,28 +55,34 @@ public class Group10 {
         }
         Radix radixSort = new Radix();
         radixSort.radixsort(fullList,toSort.length);
+        for(int i = 0; i < toSort.length - 1; i++){
+
+            if(fullList[i].word.compareTo(fullList[i+1].word) == 1){
+                Data save = fullList[i];
+                fullList[i] = fullList[i + 1];
+                fullList[i + 1] = save;
+            }
+        }
+
         return fullList;
     }
 
 //GeeksforGeeks.org
     static class Radix {
 
-        GematriaComparator comparator = new GematriaComparator();
-
         long getMax(Data[] arr, int n) {
-            long mx = comparator.gematrify(arr[0].word);
+            Data mx = arr[0];
             for (int i = 1; i < n; i++) {
-                long temp = comparator.gematrify(arr[i].word);
-                if (temp > mx) {
-                    mx = temp;
+                if (arr[i].prime > mx.prime) {
+                    mx = arr[i];
                 }
             }
-            return mx;
+            return mx.prime;
         }
 
         // A function to do counting sort of arr[] according to
         // the digit represented by exp.
-        void countSort(Data[] arr, int n, long exp) {
+        void countSort(Data[] arr, int n, int exp) {
             Data[] output = new Data[n]; // output array
             int i;
             int[] count = new int[10];
@@ -83,7 +90,7 @@ public class Group10 {
 
             // Store count of occurrences in count[]
             for (i = 0; i < n; i++)
-                count[(int) ((comparator.gematrify(arr[i].word) / exp) % 10)]++;
+                count[((arr[i].prime / exp) % 10)]++;
 
             // Change count[i] so that count[i] now contains
             // actual position of this digit in output[]
@@ -92,14 +99,37 @@ public class Group10 {
 
             // Build the output array
             for (i = n - 1; i >= 0; i--) {
-                output[count[(int) ((comparator.gematrify(arr[i].word) / exp) % 10)] - 1] = arr[i];
-                count[(int) ((comparator.gematrify(arr[i].word) / exp) % 10)]--;
+                output[count[((arr[i].prime / exp) % 10)] - 1] = arr[i];
+                count[(arr[i].prime / exp) % 10]--;
             }
 
             // Copy the output array to arr[], so that arr[] now
             // contains sorted numbers according to curent digit
             for (i = 0; i < n; i++)
                 arr[i] = output[i];
+        }
+
+        //generates prime decomposition from lowest to highest as a int
+        public double primeDecomp(long x){
+            double result = 0;
+            int place = 0;
+
+            if(x == 1){
+                result = result + x;
+            }
+
+            for(int i = 2; i<= x; i++) {
+                while(x%i == 0) {
+                    result = (result*Math.pow(10,place) + i);
+                    x = x/i;
+                    place++;
+                }
+            }
+
+            if(x >2) {
+                result = (result*Math.pow(10,place) + x);
+            }
+            return result;
         }
 
         // The main function to that sorts arr[] of size n using
@@ -191,10 +221,15 @@ public class Group10 {
     }
 
     private static class Data {
-        public String word;         // The original string-- useful to outputting at the end.
+        Radix toprime = new Radix();
+        GematriaComparator gematrify = new GematriaComparator();
+
+        public String word; // The original string-- useful to outputting at the end.
+        public int prime;
 
         public Data(String inWord) {
             word = new String(inWord); // Make a copy of the string
+            prime = (int) toprime.primeDecomp(gematrify.gematrify(word));
         }
         public static void print_test(String s1,String s2){
             Data testItem1 = new Data(s1);
@@ -213,8 +248,18 @@ public class Group10 {
         public static void test_Data() {
             String s1,s2;
 
+
+            Data a = new Data("cat");
+            System.out.println(a.prime);
+            Data b = new Data("b");
+            System.out.println(b.prime);
+            Data c = new Data("a");
+            System.out.println(c.prime);
+
+
+
             print_test("a","b");      // Two of the same thing
-            print_test("cat","dog");      // Two different
+            print_test("be","a");  // Two different
             print_test("cat","doh");      // both with even gematria
             System.out.println("---");
         }
