@@ -55,15 +55,6 @@ public class Group10 {
         }
         Radix radixSort = new Radix();
         radixSort.radixsort(fullList,toSort.length);
-        for(int i = 0; i < toSort.length - 1; i++){
-
-            if(fullList[i].word.compareTo(fullList[i+1].word) == 1){
-                Data save = fullList[i];
-                fullList[i] = fullList[i + 1];
-                fullList[i + 1] = save;
-            }
-        }
-
         return fullList;
     }
 
