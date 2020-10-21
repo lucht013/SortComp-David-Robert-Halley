@@ -75,7 +75,7 @@ public class Group10 {
 
         // A function to do counting sort of arr[] according to
         // the digit represented by exp.
-        void countSort(Data[] arr, int n, long exp) {
+        /*void countSort(Data[] arr, int n, long exp) { //counting sort
             Data[] output = new Data[n]; // output array
             int i;
             int[] count = new int[10];
@@ -100,7 +100,7 @@ public class Group10 {
             // contains sorted numbers according to curent digit
             for (i = 0; i < n; i++)
                 arr[i] = output[i];
-        }
+        }*/
 
         // The main function to that sorts arr[] of size n using
         // Radix Sort
@@ -109,7 +109,7 @@ public class Group10 {
             long m = getMax(arr, n);
 
             for (int exp = 1; m / exp > 0; exp *= 10)
-                countSort(arr, n, exp);
+                Arrays.sort(arr,new GematriaComparator());
         }
     }
 
